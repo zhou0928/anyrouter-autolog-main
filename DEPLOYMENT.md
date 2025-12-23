@@ -17,7 +17,7 @@ git add .
 git commit -m "Initial commit: Add AnyRouter auto check-in project"
 
 # 添加远程仓库（替换为你的仓库地址）
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+git remote add origin https://github.com/zhou0928/anyrouter-autolog-main.git
 
 # 推送到 GitHub
 git push -u origin main
@@ -25,7 +25,7 @@ git push -u origin main
 
 如果你的默认分支是 `master` 而不是 `main`，请使用：
 ```bash
-git push -u origin master
+git push -u origin main
 ```
 
 ### 2️⃣ 配置 GitHub Environment
