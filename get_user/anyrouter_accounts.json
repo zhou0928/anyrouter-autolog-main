@@ -1,0 +1,10 @@
+[
+  {
+    "name": "主账号",
+    "provider": "tribiosapi",
+    "api_user": "",
+    "cookies": {
+      "session": ""
+    }
+  }
+]
