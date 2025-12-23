@@ -48,7 +48,9 @@ jobs:
       
       - name: 创建配置文件
         run: |
-          echo "ANYROUTER_ACCOUNTS=${{ secrets.ANYROUTER_ACCOUNTS }}" > .env
+          cat > .env << 'EOF'
+ANYROUTER_ACCOUNTS=${{ secrets.ANYROUTER_ACCOUNTS }}
+EOF
           if [ -n "${{ secrets.PROVIDERS }}" ]; then
             echo "PROVIDERS=${{ secrets.PROVIDERS }}" >> .env
           fi
