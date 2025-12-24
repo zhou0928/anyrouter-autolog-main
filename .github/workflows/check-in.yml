@@ -8,6 +8,11 @@ on:
   # 手动触发
   workflow_dispatch:
 
+  # 临时添加 push trigger 以便在推送到 main 时自动触发（测试用，将在验证后移除）
+  push:
+    branches:
+      - main
+
 jobs:
   check-in:
     runs-on: ubuntu-latest
