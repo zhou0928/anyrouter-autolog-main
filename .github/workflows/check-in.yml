@@ -41,7 +41,8 @@ jobs:
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           else
-            pip install python-dotenv requests playwright
+            # 使用 pyproject.toml 中声明的依赖安装项目依赖（包括 httpx, playwright 等）
+            pip install .
           fi
 
       - name: 安装 Playwright 浏览器（通过 pip + CLI 安装，以避免 Action 弃用问题）
