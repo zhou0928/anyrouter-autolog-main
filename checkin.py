@@ -88,20 +88,46 @@ async def get_waf_cookies_with_playwright(account_name: str, login_url: str):
                     '--disable-web-security',
                     '--disable-features=VizDisplayCompositor',
                     '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-accelerated-2d-canvas',
+                    '--no-first-run',
+                    '--no-zygote',
+                    '--disable-gpu',
+                    '--disable-extensions',
+                    '--disable-background-timer-throttling',
+                    '--disable-backgrounding-occluded-windows',
+                    '--disable-renderer-backgrounding',
+                    '--disable-features=TranslateUI',
+                    '--enable-features=NetworkService,NetworkServiceInProcess',
+                    '--disable-features=VizDisplayCompositor',
                 ],
             )
 
             page = await context.new_page()
 
+            # 隐藏webdriver属性
+            await page.add_init_script(
+                "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+            )
+
             try:
                 print(f'🔄 [处理中] {account_name}: 正在访问登录页面获取初始 cookies...')
 
-                await page.goto(login_url, wait_until='networkidle')
+                await page.goto(login_url, wait_until='domcontentloaded')
 
+                # 等待页面完全加载并执行JS
+                await page.wait_for_timeout(5000)
+
+                # 额外等待WAF相关脚本执行
                 try:
-                    await page.wait_for_function('document.readyState === "complete"', timeout=5000)
+                    await page.wait_for_function(
+                        'document.querySelector("script") !== null || window.acw_tc !== undefined',
+                        timeout=10000
+                    )
                 except Exception:
-                    await page.wait_for_timeout(3000)
+                    # 如果等待失败，继续等待固定时间
+                    await page.wait_for_timeout(5000)
 
                 cookies = await page.context.cookies()
 
