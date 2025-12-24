@@ -320,7 +320,8 @@ async def check_in_account(account: AccountConfig, account_index: int, app_confi
     if not all_cookies:
         return False, None
 
-    client = httpx.Client(http2=True, timeout=30.0)
+    # 使用 HTTP/1.1 以避免依赖 h2 包（如果需要 HTTP/2 可改回 True 并安装 httpx[http2]）
+    client = httpx.Client(http2=False, timeout=30.0)
 
     try:
         client.cookies.update(all_cookies)
