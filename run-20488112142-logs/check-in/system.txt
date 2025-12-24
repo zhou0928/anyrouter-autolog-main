@@ -1,0 +1,5 @@
+2025-12-24T14:22:30.4960000Z Requested labels: ubuntu-latest
+2025-12-24T14:22:30.4960000Z Job defined at: zhou0928/anyrouter-autolog-main/.github/workflows/check-in.yml@refs/heads/main
+2025-12-24T14:22:30.4960000Z Waiting for a runner to pick up this job...
+2025-12-24T14:22:30.9810000Z Job is waiting for a hosted runner to come online.
+2025-12-24T14:22:30.9820000Z Job is about to start running on the hosted runner: GitHub Actions 1000000025

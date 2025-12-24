@@ -1,0 +1,226 @@
+﻿2025-12-24T14:22:33.2189002Z Current runner version: '2.330.0'
+2025-12-24T14:22:33.2213327Z ##[group]Runner Image Provisioner
+2025-12-24T14:22:33.2214163Z Hosted Compute Agent
+2025-12-24T14:22:33.2214682Z Version: 20251211.462
+2025-12-24T14:22:33.2215275Z Commit: 6cbad8c2bb55d58165063d031ccabf57e2d2db61
+2025-12-24T14:22:33.2215895Z Build Date: 2025-12-11T16:28:49Z
+2025-12-24T14:22:33.2216462Z Worker ID: {64c177de-c3d3-4117-b675-7dde4de9b18e}
+2025-12-24T14:22:33.2217083Z ##[endgroup]
+2025-12-24T14:22:33.2217537Z ##[group]Operating System
+2025-12-24T14:22:33.2218030Z Ubuntu
+2025-12-24T14:22:33.2218734Z 24.04.3
+2025-12-24T14:22:33.2219173Z LTS
+2025-12-24T14:22:33.2219605Z ##[endgroup]
+2025-12-24T14:22:33.2220103Z ##[group]Runner Image
+2025-12-24T14:22:33.2220619Z Image: ubuntu-24.04
+2025-12-24T14:22:33.2221045Z Version: 20251215.174.1
+2025-12-24T14:22:33.2222013Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251215.174/images/ubuntu/Ubuntu2404-Readme.md
+2025-12-24T14:22:33.2223435Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251215.174
+2025-12-24T14:22:33.2224752Z ##[endgroup]
+2025-12-24T14:22:33.2225772Z ##[group]GITHUB_TOKEN Permissions
+2025-12-24T14:22:33.2227959Z Contents: read
+2025-12-24T14:22:33.2228725Z Metadata: read
+2025-12-24T14:22:33.2229198Z Packages: read
+2025-12-24T14:22:33.2229667Z ##[endgroup]
+2025-12-24T14:22:33.2232148Z Secret source: Actions
+2025-12-24T14:22:33.2232908Z Prepare workflow directory
+2025-12-24T14:22:33.2548835Z Prepare all required actions
+2025-12-24T14:22:33.2587452Z Getting action download info
+2025-12-24T14:22:33.7465675Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2025-12-24T14:22:33.9385725Z Download action repository 'actions/setup-python@v4' (SHA:7f4fc3e22c37d6ff65e88745f38bd3157c663f7c)
+2025-12-24T14:22:34.0328686Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+2025-12-24T14:22:34.1514529Z Download action repository 'actions/download-artifact@v4' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+2025-12-24T14:22:35.0299727Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-12-24T14:22:35.2263997Z Complete job name: check-in
+2025-12-24T14:22:35.3072729Z ##[group]Run actions/checkout@v4
+2025-12-24T14:22:35.3073631Z with:
+2025-12-24T14:22:35.3074161Z   repository: zhou0928/anyrouter-autolog-main
+2025-12-24T14:22:35.3075058Z   token: ***
+2025-12-24T14:22:35.3075531Z   ssh-strict: true
+2025-12-24T14:22:35.3076025Z   ssh-user: git
+2025-12-24T14:22:35.3076528Z   persist-credentials: true
+2025-12-24T14:22:35.3077057Z   clean: true
+2025-12-24T14:22:35.3077555Z   sparse-checkout-cone-mode: true
+2025-12-24T14:22:35.3078130Z   fetch-depth: 1
+2025-12-24T14:22:35.3078763Z   fetch-tags: false
+2025-12-24T14:22:35.3079260Z   show-progress: true
+2025-12-24T14:22:35.3079767Z   lfs: false
+2025-12-24T14:22:35.3080247Z   submodules: false
+2025-12-24T14:22:35.3080737Z   set-safe-directory: true
+2025-12-24T14:22:35.3081541Z ##[endgroup]
+2025-12-24T14:22:35.4122039Z Syncing repository: zhou0928/anyrouter-autolog-main
+2025-12-24T14:22:35.4124607Z ##[group]Getting Git version info
+2025-12-24T14:22:35.4125734Z Working directory is '/home/runner/work/anyrouter-autolog-main/anyrouter-autolog-main'
+2025-12-24T14:22:35.4127250Z [command]/usr/bin/git version
+2025-12-24T14:22:35.4169389Z git version 2.52.0
+2025-12-24T14:22:35.4192141Z ##[endgroup]
+2025-12-24T14:22:35.4206707Z Temporarily overriding HOME='/home/runner/work/_temp/40811f6b-f3ce-460a-9621-3a5f02304de9' before making global git config changes
+2025-12-24T14:22:35.4210183Z Adding repository directory to the temporary git global config as a safe directory
+2025-12-24T14:22:35.4222769Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/anyrouter-autolog-main/anyrouter-autolog-main
+2025-12-24T14:22:35.4261330Z Deleting the contents of '/home/runner/work/anyrouter-autolog-main/anyrouter-autolog-main'
+2025-12-24T14:22:35.4264198Z ##[group]Initializing the repository
+2025-12-24T14:22:35.4268596Z [command]/usr/bin/git init /home/runner/work/anyrouter-autolog-main/anyrouter-autolog-main
+2025-12-24T14:22:35.4386060Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-12-24T14:22:35.4388035Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2025-12-24T14:22:35.4390186Z hint: to use in all of your new repositories, which will suppress this warning,
+2025-12-24T14:22:35.4391577Z hint: call:
+2025-12-24T14:22:35.4392366Z hint:
+2025-12-24T14:22:35.4393667Z hint: 	git config --global init.defaultBranch <name>
+2025-12-24T14:22:35.4394841Z hint:
+2025-12-24T14:22:35.4396081Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-12-24T14:22:35.4398049Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-12-24T14:22:35.4399693Z hint:
+2025-12-24T14:22:35.4400473Z hint: 	git branch -m <name>
+2025-12-24T14:22:35.4401412Z hint:
+2025-12-24T14:22:35.4402642Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-12-24T14:22:35.4405268Z Initialized empty Git repository in /home/runner/work/anyrouter-autolog-main/anyrouter-autolog-main/.git/
+2025-12-24T14:22:35.4409412Z [command]/usr/bin/git remote add origin https://github.com/zhou0928/anyrouter-autolog-main
+2025-12-24T14:22:35.4438627Z ##[endgroup]
+2025-12-24T14:22:35.4440103Z ##[group]Disabling automatic garbage collection
+2025-12-24T14:22:35.4443493Z [command]/usr/bin/git config --local gc.auto 0
+2025-12-24T14:22:35.4470385Z ##[endgroup]
+2025-12-24T14:22:35.4471704Z ##[group]Setting up auth
+2025-12-24T14:22:35.4478469Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-12-24T14:22:35.4507315Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-12-24T14:22:35.4812585Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-12-24T14:22:35.4838602Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-12-24T14:22:35.5018850Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2025-12-24T14:22:35.5047154Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2025-12-24T14:22:35.5236429Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-12-24T14:22:35.5266529Z ##[endgroup]
+2025-12-24T14:22:35.5267449Z ##[group]Fetching the repository
+2025-12-24T14:22:35.5275895Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +69fc79d8bf1bb1de02088952d783943e921e6fbe:refs/remotes/origin/main
+2025-12-24T14:22:36.1213420Z From https://github.com/zhou0928/anyrouter-autolog-main
+2025-12-24T14:22:36.1215742Z  * [new ref]         69fc79d8bf1bb1de02088952d783943e921e6fbe -> origin/main
+2025-12-24T14:22:36.1240366Z ##[endgroup]
+2025-12-24T14:22:36.1241803Z ##[group]Determining the checkout info
+2025-12-24T14:22:36.1243304Z ##[endgroup]
+2025-12-24T14:22:36.1245699Z [command]/usr/bin/git sparse-checkout disable
+2025-12-24T14:22:36.1285393Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-12-24T14:22:36.1311733Z ##[group]Checking out the ref
+2025-12-24T14:22:36.1316388Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-12-24T14:22:36.1492993Z Switched to a new branch 'main'
+2025-12-24T14:22:36.1494675Z branch 'main' set up to track 'origin/main'.
+2025-12-24T14:22:36.1500020Z ##[endgroup]
+2025-12-24T14:22:36.1531848Z [command]/usr/bin/git log -1 --format=%H
+2025-12-24T14:22:36.1553456Z 69fc79d8bf1bb1de02088952d783943e921e6fbe
+2025-12-24T14:22:36.1853333Z ##[group]Run actions/setup-python@v4
+2025-12-24T14:22:36.1854519Z with:
+2025-12-24T14:22:36.1855364Z   python-version: 3.11
+2025-12-24T14:22:36.1856334Z   check-latest: false
+2025-12-24T14:22:36.1857588Z   token: ***
+2025-12-24T14:22:36.1858587Z   update-environment: true
+2025-12-24T14:22:36.1859648Z   allow-prereleases: false
+2025-12-24T14:22:36.1860661Z ##[endgroup]
+2025-12-24T14:22:36.3587364Z ##[group]Installed versions
+2025-12-24T14:22:36.4189570Z Successfully set up CPython (3.11.14)
+2025-12-24T14:22:36.4192452Z ##[endgroup]
+2025-12-24T14:22:36.5096565Z ##[group]Run actions/cache@v4
+2025-12-24T14:22:36.5097551Z with:
+2025-12-24T14:22:36.5098450Z   path: ~/.cache/pip
+2025-12-24T14:22:36.5099880Z   key: Linux-pip-07b366c7f00ddabce24a4045f35b943914bd5d69174252512c315a3b4723e874
+2025-12-24T14:22:36.5101558Z   restore-keys: Linux-pip-
+
+2025-12-24T14:22:36.5102536Z   enableCrossOsArchive: false
+2025-12-24T14:22:36.5103541Z   fail-on-cache-miss: false
+2025-12-24T14:22:36.5104504Z   lookup-only: false
+2025-12-24T14:22:36.5105387Z   save-always: false
+2025-12-24T14:22:36.5106213Z env:
+2025-12-24T14:22:36.5107159Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:36.5108917Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+2025-12-24T14:22:36.5110522Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:36.5111982Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:36.5113438Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:36.5114950Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+2025-12-24T14:22:36.5116159Z ##[endgroup]
+2025-12-24T14:22:36.9139171Z Cache not found for input keys: Linux-pip-07b366c7f00ddabce24a4045f35b943914bd5d69174252512c315a3b4723e874, Linux-pip-
+2025-12-24T14:22:36.9233743Z ##[group]Run python -m pip install --upgrade pip
+2025-12-24T14:22:36.9235063Z [36;1mpython -m pip install --upgrade pip[0m
+2025-12-24T14:22:36.9236186Z [36;1mif [ -f requirements.txt ]; then[0m
+2025-12-24T14:22:36.9237289Z [36;1m  pip install -r requirements.txt[0m
+2025-12-24T14:22:36.9238524Z [36;1melse[0m
+2025-12-24T14:22:36.9239514Z [36;1m  # 使用 pyproject.toml 中声明的依赖安装项目依赖（包括 httpx, playwright 等）[0m
+2025-12-24T14:22:36.9240699Z [36;1m  pip install .[0m
+2025-12-24T14:22:36.9241500Z [36;1mfi[0m
+2025-12-24T14:22:36.9320867Z shell: /usr/bin/bash -e {0}
+2025-12-24T14:22:36.9321792Z env:
+2025-12-24T14:22:36.9322707Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:36.9324206Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+2025-12-24T14:22:36.9325672Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:36.9326994Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:36.9328610Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:36.9329973Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+2025-12-24T14:22:36.9331102Z ##[endgroup]
+2025-12-24T14:22:40.9106680Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages (25.3)
+2025-12-24T14:22:41.9557570Z Processing /home/runner/work/anyrouter-autolog-main/anyrouter-autolog-main
+2025-12-24T14:22:41.9579508Z   Installing build dependencies: started
+2025-12-24T14:22:43.3195506Z   Installing build dependencies: finished with status 'done'
+2025-12-24T14:22:43.3198866Z   Getting requirements to build wheel: started
+2025-12-24T14:22:43.7662916Z   Getting requirements to build wheel: finished with status 'error'
+2025-12-24T14:22:43.7697335Z   error: subprocess-exited-with-error
+2025-12-24T14:22:43.7697831Z   
+2025-12-24T14:22:43.7698859Z   × Getting requirements to build wheel did not run successfully.
+2025-12-24T14:22:43.7699521Z   │ exit code: 1
+2025-12-24T14:22:43.7700011Z   ╰─> [14 lines of output]
+2025-12-24T14:22:43.7700779Z       error: Multiple top-level packages discovered in a flat-layout: ['assets', 'get_user', 'anyrouter'].
+2025-12-24T14:22:43.7702187Z       
+2025-12-24T14:22:43.7702720Z       To avoid accidental inclusion of unwanted files or directories,
+2025-12-24T14:22:43.7703427Z       setuptools will not proceed with this build.
+2025-12-24T14:22:43.7703950Z       
+2025-12-24T14:22:43.7704469Z       If you are trying to create a single distribution with multiple packages
+2025-12-24T14:22:43.7705185Z       on purpose, you should not rely on automatic discovery.
+2025-12-24T14:22:43.7705769Z       Instead, consider the following options:
+2025-12-24T14:22:43.7706294Z       
+2025-12-24T14:22:43.7706818Z       1. set up custom discovery (`find` directive with `include` or `exclude`)
+2025-12-24T14:22:43.7707464Z       2. use a `src-layout`
+2025-12-24T14:22:43.7708076Z       3. explicitly set `py_modules` or `packages` with a list of names
+2025-12-24T14:22:43.7709016Z       
+2025-12-24T14:22:43.7709515Z       To find more information, look for "package discovery" on setuptools docs.
+2025-12-24T14:22:43.7710116Z       [end of output]
+2025-12-24T14:22:43.7710447Z   
+2025-12-24T14:22:43.7710966Z   note: This error originates from a subprocess, and is likely not a problem with pip.
+2025-12-24T14:22:43.7722083Z ERROR: Failed to build 'file:///home/runner/work/anyrouter-autolog-main/anyrouter-autolog-main' when getting requirements to build wheel
+2025-12-24T14:22:43.8367791Z ##[error]Process completed with exit code 1.
+2025-12-24T14:22:43.8468914Z ##[group]Run actions/upload-artifact@v4
+2025-12-24T14:22:43.8469212Z with:
+2025-12-24T14:22:43.8469392Z   name: balance-hash
+2025-12-24T14:22:43.8469600Z   path: balance_hash.txt
+2025-12-24T14:22:43.8469804Z   retention-days: 90
+2025-12-24T14:22:43.8470001Z   if-no-files-found: warn
+2025-12-24T14:22:43.8470201Z   compression-level: 6
+2025-12-24T14:22:43.8470400Z   overwrite: false
+2025-12-24T14:22:43.8470595Z   include-hidden-files: false
+2025-12-24T14:22:43.8470807Z env:
+2025-12-24T14:22:43.8471037Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:43.8471413Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+2025-12-24T14:22:43.8471807Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:43.8472148Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:43.8472482Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2025-12-24T14:22:43.8472858Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+2025-12-24T14:22:43.8473142Z ##[endgroup]
+2025-12-24T14:22:44.0585566Z With the provided path, there will be 1 file uploaded
+2025-12-24T14:22:44.0591265Z Artifact name is valid!
+2025-12-24T14:22:44.0592316Z Root directory input is valid!
+2025-12-24T14:22:44.3023661Z Beginning upload of artifact content to blob storage
+2025-12-24T14:22:44.5779482Z Uploaded bytes 164
+2025-12-24T14:22:44.6495477Z Finished uploading artifact content to blob storage!
+2025-12-24T14:22:44.6497891Z SHA256 digest of uploaded artifact zip is 9d5bc82e0fb70bfef129286352d54623a24c7211ef619ec30e8edf421d0eb978
+2025-12-24T14:22:44.6500032Z Finalizing artifact upload
+2025-12-24T14:22:44.7794064Z Artifact balance-hash.zip successfully finalized. Artifact ID 4961914263
+2025-12-24T14:22:44.7795294Z Artifact balance-hash has been successfully uploaded! Final size is 164 bytes. Artifact ID is 4961914263
+2025-12-24T14:22:44.7803272Z Artifact download URL: https://github.com/zhou0928/anyrouter-autolog-main/actions/runs/20488112142/artifacts/4961914263
+2025-12-24T14:22:44.7909727Z Post job cleanup.
+2025-12-24T14:22:44.8830550Z [command]/usr/bin/git version
+2025-12-24T14:22:44.8865108Z git version 2.52.0
+2025-12-24T14:22:44.8905404Z Temporarily overriding HOME='/home/runner/work/_temp/bdbe4cec-7f8d-4f55-ac69-dcfc2da2c488' before making global git config changes
+2025-12-24T14:22:44.8906455Z Adding repository directory to the temporary git global config as a safe directory
+2025-12-24T14:22:44.8920105Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/anyrouter-autolog-main/anyrouter-autolog-main
+2025-12-24T14:22:44.8953143Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-12-24T14:22:44.8984586Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-12-24T14:22:44.9181462Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-12-24T14:22:44.9201901Z http.https://github.com/.extraheader
+2025-12-24T14:22:44.9214525Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-12-24T14:22:44.9242730Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-12-24T14:22:44.9430407Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2025-12-24T14:22:44.9460536Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2025-12-24T14:22:44.9830769Z Cleaning up orphan processes

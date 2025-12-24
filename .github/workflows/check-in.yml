@@ -7,11 +7,7 @@ on:
   
   # 手动触发
   workflow_dispatch:
-
-  # 临时添加 push trigger 以便在推送到 main 时自动触发（测试用，将在验证后移除）
-  push:
-    branches:
-      - main
+  # NOTE: 临时的 push trigger 已移除，恢复为仅 schedule + manual triggers
 
 jobs:
   check-in:
@@ -55,11 +51,15 @@ jobs:
           python -m playwright install --with-deps
 
       - name: 校验关键 Secrets
+        env:
+          ANYROUTER_ACCOUNTS: ${{ secrets.ANYROUTER_ACCOUNTS }}
         run: |
-          if [ -z "${{ secrets.ANYROUTER_ACCOUNTS }}" ]; then
+          # Sanitize secret by removing CR/LF to avoid breaking shell conditional when secret contains newlines
+          ACCOUNTS_STR=$(echo "$ANYROUTER_ACCOUNTS" | tr -d '\r\n')
+          if [ -z "$ACCOUNTS_STR" ]; then
             echo "ERROR: Missing required secret ANYROUTER_ACCOUNTS"; exit 1
           fi
-          echo "INFO: ANYROUTER_ACCOUNTS is set"
+          echo "INFO: ANYROUTER_ACCOUNTS is set (length: $(printf '%s' "$ACCOUNTS_STR" | wc -c))"
 
       - name: 创建配置文件 (.env)
         env:
@@ -76,22 +76,24 @@ jobs:
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
           SERVERPUSHKEY: ${{ secrets.SERVERPUSHKEY }}
         run: |
-          echo "ANYROUTER_ACCOUNTS=$ANYROUTER_ACCOUNTS" > .env
-          [ -n "$PROVIDERS" ] && echo "PROVIDERS=$PROVIDERS" >> .env
-          [ -n "$ALWAYS_NOTIFY" ] && echo "ALWAYS_NOTIFY=$ALWAYS_NOTIFY" >> .env
-          [ -n "$EMAIL_USER" ] && echo "EMAIL_USER=$EMAIL_USER" >> .env
-          [ -n "$EMAIL_PASS" ] && echo "EMAIL_PASS=$EMAIL_PASS" >> .env
-          [ -n "$CUSTOM_SMTP_SERVER" ] && echo "CUSTOM_SMTP_SERVER=$CUSTOM_SMTP_SERVER" >> .env
-          [ -n "$EMAIL_TO" ] && echo "EMAIL_TO=$EMAIL_TO" >> .env
-          [ -n "$DINGDING_WEBHOOK" ] && echo "DINGDING_WEBHOOK=$DINGDING_WEBHOOK" >> .env
-          [ -n "$FEISHU_WEBHOOK" ] && echo "FEISHU_WEBHOOK=$FEISHU_WEBHOOK" >> .env
-          [ -n "$WEIXIN_WEBHOOK" ] && echo "WEIXIN_WEBHOOK=$WEIXIN_WEBHOOK" >> .env
-          [ -n "$PUSHPLUS_TOKEN" ] && echo "PUSHPLUS_TOKEN=$PUSHPLUS_TOKEN" >> .env
-          [ -n "$SERVERPUSHKEY" ] && echo "SERVERPUSHKEY=$SERVERPUSHKEY" >> .env
-          echo '--- .env preview ---'
-          sed -n '1,120p' .env || true
+          # write sanitized values to .env (remove CRLF so each value is a single line)
+          echo "ANYROUTER_ACCOUNTS=$(echo "$ANYROUTER_ACCOUNTS" | tr -d '\r\n')" > .env
+          [ -n "$PROVIDERS" ] && echo "PROVIDERS=$(echo "$PROVIDERS" | tr -d '\r\n')" >> .env
+          [ -n "$ALWAYS_NOTIFY" ] && echo "ALWAYS_NOTIFY=$(echo "$ALWAYS_NOTIFY" | tr -d '\r\n')" >> .env
+          [ -n "$EMAIL_USER" ] && echo "EMAIL_USER=$(echo "$EMAIL_USER" | tr -d '\r\n')" >> .env
+          [ -n "$EMAIL_PASS" ] && echo "EMAIL_PASS=$(echo "$EMAIL_PASS" | tr -d '\r\n')" >> .env
+          [ -n "$CUSTOM_SMTP_SERVER" ] && echo "CUSTOM_SMTP_SERVER=$(echo "$CUSTOM_SMTP_SERVER" | tr -d '\r\n')" >> .env
+          [ -n "$EMAIL_TO" ] && echo "EMAIL_TO=$(echo "$EMAIL_TO" | tr -d '\r\n')" >> .env
+          [ -n "$DINGDING_WEBHOOK" ] && echo "DINGDING_WEBHOOK=$(echo "$DINGDING_WEBHOOK" | tr -d '\r\n')" >> .env
+          [ -n "$FEISHU_WEBHOOK" ] && echo "FEISHU_WEBHOOK=$(echo "$FEISHU_WEBHOOK" | tr -d '\r\n')" >> .env
+          [ -n "$WEIXIN_WEBHOOK" ] && echo "WEIXIN_WEBHOOK=$(echo "$WEIXIN_WEBHOOK" | tr -d '\r\n')" >> .env
+          [ -n "$PUSHPLUS_TOKEN" ] && echo "PUSHPLUS_TOKEN=$(echo "$PUSHPLUS_TOKEN" | tr -d '\r\n')" >> .env
+          [ -n "$SERVERPUSHKEY" ] && echo "SERVERPUSHKEY=$(echo "$SERVERPUSHKEY" | tr -d '\r\n')" >> .env
+          echo '--- .env preview (masked, first 120 bytes) ---'
+          # Mask values in preview to avoid exposing secrets
+          head -c 120 .env | sed -E 's/=(.*)/=****/' || true
           echo '--- secret presence ---'
-          [ -n "$PROVIDERS" ] && echo "PROVIDERS set" || echo "PROVIDERS missing"
+          [ -n "$PROVIDERS" ] && echo "PROVIDERS set (len: $(echo -n "$PROVIDERS" | tr -d '\r\n' | wc -c))" || echo "PROVIDERS missing"
           [ -n "$ALWAYS_NOTIFY" ] && echo "ALWAYS_NOTIFY set" || echo "ALWAYS_NOTIFY missing"
           [ -n "$EMAIL_USER" ] && echo "EMAIL_USER set" || echo "EMAIL_USER missing"
           [ -n "$EMAIL_PASS" ] && echo "EMAIL_PASS set" || echo "EMAIL_PASS missing"
