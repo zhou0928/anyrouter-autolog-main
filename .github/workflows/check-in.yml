@@ -39,11 +39,12 @@ jobs:
             pip install python-dotenv requests playwright
           fi
 
-      - name: 安装 Playwright 浏览器 (官方 action)
-        uses: microsoft/playwright-github-action@v1
-        with:
-          fetch-deps: true
-          browsers: chromium
+      - name: 安装 Playwright 浏览器（通过 pip + CLI 安装，以避免 Action 弃用问题）
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install playwright
+          # 安装浏览器及其系统依赖
+          python -m playwright install --with-deps
 
       - name: 校验关键 Secrets
         run: |
