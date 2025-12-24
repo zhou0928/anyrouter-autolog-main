@@ -38,12 +38,14 @@ jobs:
       - name: 安装项目依赖
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          else
-            # 使用 pyproject.toml 中声明的依赖安装项目依赖（包括 httpx, playwright 等）
-            pip install .
-          fi
+          # 直接安装项目需要的运行时依赖，避免构建包时因 flat-layout 导致失败
+          python -m pip install "httpx[http2]>=0.24.0" "playwright>=1.40.0" "python-dotenv>=1.0.0" requests
+          # 验证关键依赖已安装
+          python -m pip show httpx || true
+          python -c "import httpx; print('httpx', httpx.__version__)" || true
+          python -m pip show requests || true
+          python -c "import requests; print('requests', requests.__version__)" || true
+          python -m pip list
 
       - name: 安装 Playwright 浏览器（通过 pip + CLI 安装，以避免 Action 弃用问题）
         run: |
@@ -88,6 +90,16 @@ jobs:
           [ -n "$SERVERPUSHKEY" ] && echo "SERVERPUSHKEY=$SERVERPUSHKEY" >> .env
           echo '--- .env preview ---'
           sed -n '1,120p' .env || true
+          echo '--- secret presence ---'
+          [ -n "$PROVIDERS" ] && echo "PROVIDERS set" || echo "PROVIDERS missing"
+          [ -n "$ALWAYS_NOTIFY" ] && echo "ALWAYS_NOTIFY set" || echo "ALWAYS_NOTIFY missing"
+          [ -n "$EMAIL_USER" ] && echo "EMAIL_USER set" || echo "EMAIL_USER missing"
+          [ -n "$EMAIL_PASS" ] && echo "EMAIL_PASS set" || echo "EMAIL_PASS missing"
+          [ -n "$PUSHPLUS_TOKEN" ] && echo "PUSHPLUS_TOKEN set" || echo "PUSHPLUS_TOKEN missing"
+          [ -n "$DINGDING_WEBHOOK" ] && echo "DINGDING_WEBHOOK set" || echo "DINGDING_WEBHOOK missing"
+          [ -n "$FEISHU_WEBHOOK" ] && echo "FEISHU_WEBHOOK set" || echo "FEISHU_WEBHOOK missing"
+          [ -n "$WEIXIN_WEBHOOK" ] && echo "WEIXIN_WEBHOOK set" || echo "WEIXIN_WEBHOOK missing"
+          [ -n "$SERVERPUSHKEY" ] && echo "SERVERPUSHKEY set" || echo "SERVERPUSHKEY missing"
 
       - name: 恢复余额状态
         uses: actions/download-artifact@v4
