@@ -3,7 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from typing import Literal
 
-import httpx
+import requests
 from dotenv import load_dotenv
 
 # 加载环境变量
@@ -24,7 +24,7 @@ class NotificationKit:
 
 	def send_email(self, title: str, content: str, msg_type: Literal['text', 'html'] = 'text'):
 		if not self.email_user or not self.email_pass or not self.email_to:
-			raise ValueError('邮箱配置未设置')
+			raise ValueError('未配置邮箱信息')
 
 		# MIMEText 需要 'plain' 或 'html'，而不是 'text'
 		mime_subtype = 'plain' if msg_type == 'text' else 'html'
@@ -40,27 +40,24 @@ class NotificationKit:
 
 	def send_pushplus(self, title: str, content: str):
 		if not self.pushplus_token:
-			raise ValueError('PushPlus Token 未配置')
+			raise ValueError('未配置PushPlus Token')
 
 		data = {'token': self.pushplus_token, 'title': title, 'content': content, 'template': 'html'}
-		with httpx.Client(timeout=30.0) as client:
-			client.post('http://www.pushplus.plus/send', json=data)
+		requests.post('http://www.pushplus.plus/send', json=data)
 
 	def send_serverPush(self, title: str, content: str):
 		if not self.server_push_key:
 			raise ValueError('Server酱 SendKey 未配置')
 
 		data = {'title': title, 'desp': content}
-		with httpx.Client(timeout=30.0) as client:
-			client.post(f'https://sctapi.ftqq.com/{self.server_push_key}.send', json=data)
+		requests.post(f'https://sctapi.ftqq.com/{self.server_push_key}.send', json=data)
 
 	def send_dingtalk(self, title: str, content: str):
 		if not self.dingding_webhook:
 			raise ValueError('钉钉 Webhook 未配置')
 
 		data = {'msgtype': 'text', 'text': {'content': f'{title}\n{content}'}}
-		with httpx.Client(timeout=30.0) as client:
-			client.post(self.dingding_webhook, json=data)
+		requests.post(self.dingding_webhook, json=data)
 
 	def send_feishu(self, title: str, content: str):
 		if not self.feishu_webhook:
@@ -73,16 +70,14 @@ class NotificationKit:
 				'header': {'template': 'blue', 'title': {'content': title, 'tag': 'plain_text'}},
 			},
 		}
-		with httpx.Client(timeout=30.0) as client:
-			client.post(self.feishu_webhook, json=data)
+		requests.post(self.feishu_webhook, json=data)
 
 	def send_wecom(self, title: str, content: str):
 		if not self.weixin_webhook:
 			raise ValueError('企业微信 Webhook 未配置')
 
 		data = {'msgtype': 'text', 'text': {'content': f'{title}\n{content}'}}
-		with httpx.Client(timeout=30.0) as client:
-			client.post(self.weixin_webhook, json=data)
+		requests.post(self.weixin_webhook, json=data)
 
 	def push_message(self, title: str, content: str, msg_type: Literal['text', 'html'] = 'text'):
 		notifications = [
