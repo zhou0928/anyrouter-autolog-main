@@ -85,6 +85,17 @@ class AppConfig:
                 api_user_key='new-api-user',
                 bypass_method=None,
             ),
+            'tribiosapi': ProviderConfig(
+                name='tribiosapi',
+                domain='https://www.tribiosapi.top',
+                login_path='/login',
+                sign_in_path=None,  # 不支持旧的签到接口
+                checkin_path='/api/user/checkin',
+                checkin_status_path='/api/user/checkin/status',
+                user_info_path='/api/user/self',
+                api_user_key='new-api-user',
+                bypass_method=None,
+            ),
         }
 
         # 尝试从环境变量加载自定义 providers
