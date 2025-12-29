@@ -206,6 +206,7 @@ python merge_accounts.py
 - 🔧 支持部分账号失败，只要有账号成功签到，整个任务就不会失败
 - 🔑 报 401 错误，请重新获取 cookies，理论 1 个月失效，但有 Bug，详见 [#6](https://github.com/millylee/anyrouter-check-in/issues/6)
 - 💾 请求 200，但出现 Error 1040（08004）：Too many connections，官方数据库问题，目前已修复，但遇到几次了，详见 [#7](https://github.com/millylee/anyrouter-check-in/issues/7)
+- 🏠 **如果遇到 403 错误**：某些平台（如 tribiosapi）的 session cookie 绑定了 IP 地址，导致 GitHub Actions 无法使用。解决方案：使用自托管 Runner，详见 [SELF_HOSTED_RUNNER.md](SELF_HOSTED_RUNNER.md)
 
 ## 📦 配置示例
 
