@@ -359,9 +359,15 @@ async def check_in_account(account: AccountConfig, account_index: int, app_confi
             success = execute_check_in(
                 client, account_name, provider_config, headers)
             return success, user_info, False
+        elif provider_config.sign_in_path:
+            # 如果有旧的签到接口，尝试使用
+            success = execute_check_in(
+                client, account_name, provider_config, headers)
+            return success, user_info, False
         else:
-            print(f'ℹ️ [信息] {account_name}: 签到已自动完成（由用户信息请求触发）')
-            return True, user_info, False
+            # 没有任何签到接口可用，返回失败
+            print(f'❌ [失败] {account_name}: 所有签到接口均失败')
+            return False, user_info, False
 
     except Exception as e:
         print(f'❌ [失败] {account_name}: 签到过程中发生错误 - {str(e)[:50]}...')
