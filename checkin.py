@@ -24,6 +24,63 @@ HEADLESS = True
 BALANCE_HASH_FILE = 'balance_hash.txt'
 
 
+def get_proxy_config():
+    """获取代理配置"""
+    # 方式1: 使用完整的代理 URL
+    proxy_url = os.getenv('PROXY_URL')
+    if proxy_url:
+        return proxy_url
+
+    # 方式2: 分别配置代理参数
+    proxy_host = os.getenv('PROXY_HOST')
+    proxy_port = os.getenv('PROXY_PORT')
+    proxy_username = os.getenv('PROXY_USERNAME')
+    proxy_password = os.getenv('PROXY_PASSWORD')
+
+    if proxy_host and proxy_port:
+        if proxy_username and proxy_password:
+            return f'http://{proxy_username}:{proxy_password}@{proxy_host}:{proxy_port}'
+        else:
+            return f'http://{proxy_host}:{proxy_port}'
+
+    return None
+
+
+def get_httpx_proxies(proxy_url):
+    """获取 httpx 代理配置"""
+    if not proxy_url:
+        return None
+    return {
+        'http://': proxy_url,
+        'https://': proxy_url,
+    }
+
+
+def get_playwright_proxy(proxy_url):
+    """获取 Playwright 代理配置"""
+    if not proxy_url:
+        return None
+
+    # 解析代理 URL
+    # 格式: http://username:password@host:port 或 http://host:port
+    import re
+    match = re.match(r'(https?|socks5)://(?:([^:]+):([^@]+)@)?([^:]+):(\d+)', proxy_url)
+    if not match:
+        return None
+
+    protocol, username, password, host, port = match.groups()
+
+    proxy_config = {
+        'server': f'{protocol}://{host}:{port}'
+    }
+
+    if username and password:
+        proxy_config['username'] = username
+        proxy_config['password'] = password
+
+    return proxy_config
+
+
 def load_balance_hash():
     """加载余额hash"""
     try:
@@ -69,27 +126,38 @@ def parse_cookies(cookies_data):
     return {}
 
 
-async def get_waf_cookies_with_playwright(account_name: str, login_url: str):
+async def get_waf_cookies_with_playwright(account_name: str, login_url: str, proxy_url: str = None):
     """使用 Playwright 获取 WAF cookies（隐私模式）"""
     print(f'🔄 [处理中] {account_name}: 正在启动浏览器获取 WAF cookies...')
+
+    if proxy_url:
+        print(f'🌐 [代理] {account_name}: 使用代理连接')
 
     async with async_playwright() as p:
         import tempfile
 
         with tempfile.TemporaryDirectory() as temp_dir:
-            context = await p.chromium.launch_persistent_context(
-                user_data_dir=temp_dir,
-                headless=HEADLESS,
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
-                viewport={'width': 1920, 'height': 1080},
-                args=[
+            # 准备启动参数
+            launch_args = {
+                'user_data_dir': temp_dir,
+                'headless': HEADLESS,
+                'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
+                'viewport': {'width': 1920, 'height': 1080},
+                'args': [
                     '--disable-blink-features=AutomationControlled',
                     '--disable-dev-shm-usage',
                     '--disable-web-security',
                     '--disable-features=VizDisplayCompositor',
                     '--no-sandbox',
                 ],
-            )
+            }
+
+            # 添加代理配置
+            playwright_proxy = get_playwright_proxy(proxy_url)
+            if playwright_proxy:
+                launch_args['proxy'] = playwright_proxy
+
+            context = await p.chromium.launch_persistent_context(**launch_args)
 
             page = await context.new_page()
 
@@ -159,13 +227,13 @@ def get_user_info(client, headers, user_info_url: str):
         return {'success': False, 'error': f'❌ 获取用户信息失败: {str(e)[:50]}...'}
 
 
-async def prepare_cookies(account_name: str, provider_config, user_cookies: dict) -> dict | None:
+async def prepare_cookies(account_name: str, provider_config, user_cookies: dict, proxy_url: str = None) -> dict | None:
     """准备请求所需的 cookies（可能包含 WAF cookies）"""
     waf_cookies = {}
 
     if provider_config.needs_waf_cookies():
         login_url = f'{provider_config.domain}{provider_config.login_path}'
-        waf_cookies = await get_waf_cookies_with_playwright(account_name, login_url)
+        waf_cookies = await get_waf_cookies_with_playwright(account_name, login_url, proxy_url)
         if not waf_cookies:
             print(f'❌ [失败] {account_name}: 无法获取 WAF cookies')
             return None
@@ -277,7 +345,7 @@ def execute_auto_checkin(client, account_name: str, provider_config, headers: di
         return (False, False)
 
 
-async def check_in_account(account: AccountConfig, account_index: int, app_config: AppConfig):
+async def check_in_account(account: AccountConfig, account_index: int, app_config: AppConfig, proxy_url: str = None):
     """为单个账号执行签到操作
 
     返回: (success: bool, user_info: dict, already_checked: bool)
@@ -296,16 +364,24 @@ async def check_in_account(account: AccountConfig, account_index: int, app_confi
     print(
         f'ℹ️ [信息] {account_name}: 使用服务商 "{account.provider}" ({provider_config.domain})')
 
+    if proxy_url:
+        print(f'🌐 [代理] {account_name}: 使用代理进行请求')
+
     user_cookies = parse_cookies(account.cookies)
     if not user_cookies:
         print(f'❌ [失败] {account_name}: 配置格式无效')
         return False, None, False
 
-    all_cookies = await prepare_cookies(account_name, provider_config, user_cookies)
+    all_cookies = await prepare_cookies(account_name, provider_config, user_cookies, proxy_url)
     if not all_cookies:
         return False, None, False
 
-    client = httpx.Client(http2=True, timeout=30.0)
+    # 创建 httpx 客户端，配置代理
+    if proxy_url:
+        # httpx 0.28+ 使用 proxy 参数（字符串），而不是 proxies（字典）
+        client = httpx.Client(http2=True, timeout=30.0, proxy=proxy_url)
+    else:
+        client = httpx.Client(http2=True, timeout=30.0)
 
     try:
         client.cookies.update(all_cookies)
@@ -381,6 +457,22 @@ async def main():
     print('🚀 [系统] AnyRouter.top 多账号自动签到脚本已启动 (使用 Playwright)')
     print(f'⏰ [时间] 执行时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
 
+    # 获取代理配置
+    proxy_url = get_proxy_config()
+    if proxy_url:
+        print(f'🌐 [代理] 检测到代理配置，将使用代理进行请求')
+        # 验证代理 IP（可选）
+        try:
+            test_client = httpx.Client(proxy=proxy_url, timeout=10.0)
+            response = test_client.get('https://api.ipify.org?format=json')
+            proxy_ip = response.json().get('ip', '未知')
+            print(f'🌐 [代理] 代理 IP: {proxy_ip}')
+            test_client.close()
+        except Exception as e:
+            print(f'⚠️ [警告] 无法验证代理 IP: {str(e)[:50]}...')
+    else:
+        print(f'ℹ️ [信息] 未配置代理，将直接连接')
+
     app_config = AppConfig.load_from_env()
     print(f'ℹ️ [信息] 已加载 {len(app_config.providers)} 个服务商配置')
 
@@ -412,7 +504,7 @@ async def main():
         account_key = f'account_{i + 1}'
         account_name = account.get_display_name(i)
         try:
-            success, user_info, already_checked = await check_in_account(account, i, app_config)
+            success, user_info, already_checked = await check_in_account(account, i, app_config, proxy_url)
             if success:
                 success_count += 1
                 if already_checked:
