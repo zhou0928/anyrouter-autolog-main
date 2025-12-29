@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  anyrouter-checkin:
+    build: .
+    container_name: anyrouter-checkin
+    restart: unless-stopped
+    environment:
+      # 账号配置（必填）
+      - ANYROUTER_ACCOUNTS=${ANYROUTER_ACCOUNTS}
+
+      # 代理配置（可选）
+      - PROXY_URL=${PROXY_URL:-}
+      - PROXY_HOST=${PROXY_HOST:-}
+      - PROXY_PORT=${PROXY_PORT:-}
+      - PROXY_USERNAME=${PROXY_USERNAME:-}
+      - PROXY_PASSWORD=${PROXY_PASSWORD:-}
+
+      # 通知配置（可选）
+      - ALWAYS_NOTIFY=${ALWAYS_NOTIFY:-false}
+      - PUSHPLUS_TOKEN=${PUSHPLUS_TOKEN:-}
+      - SERVERPUSHKEY=${SERVERPUSHKEY:-}
+      - DINGDING_WEBHOOK=${DINGDING_WEBHOOK:-}
+      - FEISHU_WEBHOOK=${FEISHU_WEBHOOK:-}
+      - WEIXIN_WEBHOOK=${WEIXIN_WEBHOOK:-}
+      - EMAIL_USER=${EMAIL_USER:-}
+      - EMAIL_PASS=${EMAIL_PASS:-}
+      - EMAIL_TO=${EMAIL_TO:-}
+      - CUSTOM_SMTP_SERVER=${CUSTOM_SMTP_SERVER:-}
+
+    volumes:
+      # 持久化余额历史文件
+      - ./balance_hash.txt:/app/balance_hash.txt
+
+    # 使用宿主机网络（如果需要访问宿主机的 Clash 代理）
+    # network_mode: host
+
+    # 或者使用桥接网络
+    networks:
+      - anyrouter-network
+
+networks:
+  anyrouter-network:
+    driver: bridge
